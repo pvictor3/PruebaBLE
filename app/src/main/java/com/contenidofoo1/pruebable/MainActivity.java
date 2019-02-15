@@ -3,6 +3,8 @@ package com.contenidofoo1.pruebable;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Debug";
     private static final int REQUEST_FINE_LOCATION = 2;
     BluetoothAdapter bluetoothAdapter;
+    BluetoothGatt bluetoothGatt;
     Button startScanButton;
     TextView mTextView;
     private Handler handler = new Handler();
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LeDeviceListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,13 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new LeDeviceListAdapter();
+        adapter = new LeDeviceListAdapter(new LeDeviceListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(BluetoothDevice device) {
+                //bluetoothGatt = device.connectGatt(this, false, gattCallback);
+                Log.d(TAG, "onItemClickListener: " + device.getName());
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -102,48 +112,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public class LeDeviceListAdapter extends RecyclerView.Adapter<LeDeviceListAdapter.ViewHolder> {
-        private ArrayList<BluetoothDevice> mLeDevices;
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            public TextView nombre;
-            public TextView direccion;
-            public ViewHolder(View v) {
-                super(v);
-                nombre = v.findViewById(R.id.nombre);
-                direccion = v.findViewById(R.id.direccion);
-            }
-        }
-
-        public LeDeviceListAdapter(){
-            super();
-            mLeDevices = new ArrayList<>();
-        }
-
-        public void addDevice(BluetoothDevice device){
-            if(!mLeDevices.contains(device)){
-                mLeDevices.add(device);
-            }
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.my_card,viewGroup, false);
-            return  new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-            viewHolder.nombre.setText(mLeDevices.get(i).getName());
-            viewHolder.direccion.setText(mLeDevices.get(i).getAddress());
-        }
-
-        @Override
-        public int getItemCount() {
-            return mLeDevices.size();
-        }
-
-    }
 
 }
