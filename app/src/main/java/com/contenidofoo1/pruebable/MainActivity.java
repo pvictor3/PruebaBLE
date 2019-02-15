@@ -62,8 +62,15 @@ public class MainActivity extends AppCompatActivity {
         adapter = new LeDeviceListAdapter(new LeDeviceListAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(BluetoothDevice device) {
-                //bluetoothGatt = device.connectGatt(this, false, gattCallback);
                 Log.d(TAG, "onItemClickListener: " + device.getName());
+                final Intent intent = new Intent(getBaseContext(), DeviceControlActivity.class);
+                intent.putExtra("name", device.getName());
+                intent.putExtra("address", device.getAddress());
+                if(mScanning){
+                    bluetoothAdapter.stopLeScan(leScanCallback);
+                    mScanning = false;
+                }
+                startActivity(intent);
             }
         });
         recyclerView.setAdapter(adapter);
