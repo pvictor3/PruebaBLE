@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final long SCAN_PERIOD = 10000;
-    private static final String TAG = "Debug";
+    private static final String TAG = "ListMainActivity";
     private static final int REQUEST_FINE_LOCATION = 2;
     BluetoothAdapter bluetoothAdapter;
     BluetoothGatt bluetoothGatt;
@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        if(!(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
         }
 
         startScanButton.setOnClickListener(new View.OnClickListener() {
