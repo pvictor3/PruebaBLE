@@ -49,6 +49,10 @@ public class LeDeviceListAdapter extends RecyclerView.Adapter<LeDeviceListAdapte
         }
     }
 
+    public void cleanDevices(){
+        mLeDevices.clear();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())

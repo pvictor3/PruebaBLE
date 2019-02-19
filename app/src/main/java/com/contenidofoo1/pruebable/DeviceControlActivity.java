@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class DeviceControlActivity extends AppCompatActivity {
-    private final static String TAG = DeviceControlActivity.class.getSimpleName();
+    private final static String TAG = "DeviceControlActivity1";
     TextView deviceNameText;
     TextView addressText;
     Button estadoBtn;
@@ -91,6 +91,7 @@ public class DeviceControlActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        Log.d(TAG, "onResume: BroadcastReceiver registrado!");
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);

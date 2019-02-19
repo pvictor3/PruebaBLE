@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.ParcelUuid;
 import android.util.Log;
 
 import java.util.List;
@@ -74,6 +75,12 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                //Discover characteristic
+                BluetoothGattService service = gatt.getService(UUID.fromString(MainActivity.SERVICE_UUID));
+                BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(MainActivity.SERVICE_UUID));
+                characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+
+
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
