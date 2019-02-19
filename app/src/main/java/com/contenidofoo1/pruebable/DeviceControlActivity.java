@@ -83,6 +83,7 @@ public class DeviceControlActivity extends AppCompatActivity {
         addressText.setText(intent.getStringExtra("address"));
 
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        //startService(gattServiceIntent);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
